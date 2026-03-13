@@ -1,0 +1,113 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: rnr-orange --default;
+}
+
+/* ── Custom RNR Orange Theme ── */
+@plugin "daisyui/theme" {
+  name: "rnr-orange";
+  default: true;
+  color-scheme: dark;
+
+  /* Deep dark backgrounds */
+  --color-base-100: oklch(13% 0.005 250);
+  --color-base-200: oklch(10% 0.005 250);
+  --color-base-300: oklch(8% 0.005 250);
+  --color-base-content: oklch(95% 0.005 0);
+
+  /* Brand orange primary — terracotta/burnt orange from their logo */
+  --color-primary: oklch(58% 0.16 38);
+  --color-primary-content: oklch(98% 0.005 0);
+
+  /* Warm muted orange secondary */
+  --color-secondary: oklch(50% 0.1 40);
+  --color-secondary-content: oklch(95% 0.01 0);
+
+  /* Gold accent — keep gold as a subtle nod to the product */
+  --color-accent: oklch(76% 0.12 85);
+  --color-accent-content: oklch(12% 0.02 85);
+
+  /* Neutral charcoal */
+  --color-neutral: oklch(20% 0.01 250);
+  --color-neutral-content: oklch(90% 0.005 0);
+
+  /* Status colors */
+  --color-info: oklch(70% 0.15 230);
+  --color-info-content: oklch(15% 0.02 230);
+  --color-success: oklch(68% 0.18 145);
+  --color-success-content: oklch(15% 0.02 145);
+  --color-warning: oklch(76% 0.12 85);
+  --color-warning-content: oklch(15% 0.02 85);
+  --color-error: oklch(65% 0.2 25);
+  --color-error-content: oklch(95% 0.02 25);
+
+  /* Design tokens — luxury minimal */
+  --radius-selector: 0.15rem;
+  --radius-field: 0.2rem;
+  --radius-box: 0.3rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6,
+.font-serif {
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+}
+
+body,
+.font-sans {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Smooth scroll ── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Brand gradient utility ── */
+.brand-gradient {
+  background: linear-gradient(135deg, #8B3A0F, #C65D1A, #E07730, #C65D1A, #8B3A0F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #b8860b, #daa520, #ffd700, #daa520, #b8860b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-border {
+  border-image: linear-gradient(135deg, #8B3A0F, #C65D1A, #E07730, #C65D1A, #8B3A0F) 1;
+}
+
+/* ── Fade-in animation ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Image hover zoom ── */
+.img-zoom {
+  overflow: hidden;
+}
+
+.img-zoom img {
+  transition: transform 0.6s ease;
+}
+
+.img-zoom:hover img {
+  transform: scale(1.05);
+}
