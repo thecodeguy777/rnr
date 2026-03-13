@@ -1,48 +1,13 @@
 <script setup lang="ts">
-const phpRate = 58.2
-const baseSpotUSD = 2945
-const gramsPerOz = 31.1035
+const { spotPriceUSD, spotChange, priceFlash, direction, karatPrices, simulateFluctuation, BASE_SPOT_USD, GRAMS_PER_OZ, PHP_RATE } = useGoldPrice()
 
-const karats = [
-  { label: '24K', purity: 1.0 },
-  { label: '21K', purity: 0.875 },
-  { label: '18K', purity: 0.75 },
-  { label: '14K', purity: 0.583 },
-]
-
-const spotPriceUSD = ref(baseSpotUSD)
-const spotChange = ref(0.42)
-const priceFlash = ref(false)
-const direction = ref<'up' | 'down'>('up')
 const canvas = ref<HTMLCanvasElement | null>(null)
-const karatPrices = ref<{ label: string; php: number }[]>([])
-
 let ctx: CanvasRenderingContext2D | null = null
 let animFrame: number
 
-// Market price history as normalized values (0 = baseline)
 let priceHistory: number[] = []
-let marketPrice = 0 // running normalized price for the chart
+let marketPrice = 0
 let tickCounter = 0
-
-function updatePrices() {
-  const ppg = spotPriceUSD.value / gramsPerOz
-  karatPrices.value = karats.map(k => ({
-    label: k.label,
-    php: Math.round(ppg * k.purity * phpRate),
-  }))
-}
-
-function simulateFluctuation() {
-  const prev = spotPriceUSD.value
-  const delta = (Math.random() - 0.45) * baseSpotUSD * 0.004
-  spotPriceUSD.value = +(spotPriceUSD.value + delta).toFixed(2)
-  spotChange.value = +(((spotPriceUSD.value - baseSpotUSD) / baseSpotUSD) * 100).toFixed(2)
-  direction.value = spotPriceUSD.value >= prev ? 'up' : 'down'
-  updatePrices()
-  priceFlash.value = true
-  setTimeout(() => { priceFlash.value = false }, 600)
-}
 
 function formatPHP(amount: number): string {
   return new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', minimumFractionDigits: 0 }).format(amount)
@@ -58,20 +23,16 @@ function initCanvas() {
   ctx = c.getContext('2d')
   if (ctx) ctx.scale(dpr, dpr)
 
-  // Initialize with 4H-style price history (broader swings, trending)
   const w = Math.ceil(rect.width)
   if (priceHistory.length === 0) {
     priceHistory = []
     let p = 0
-    let trend = 0.02 // slight upward bias like gold
+    let trend = 0.02
     let momentum = 0
     for (let i = 0; i < w; i++) {
-      // Trend shifts every ~40-80 points (like 4H candle clusters)
       if (Math.random() < 0.015) trend = (Math.random() - 0.45) * 0.15
-      // Momentum-based movement (trending behavior)
       momentum = momentum * 0.92 + (Math.random() - 0.48 + trend) * 0.5
       p += momentum
-      // Occasional sharp moves (news events)
       if (Math.random() < 0.008) p += (Math.random() - 0.5) * 4
       priceHistory.push(p)
     }
@@ -84,11 +45,9 @@ function drawFrame() {
   const w = canvas.value.getBoundingClientRect().width
   const h = canvas.value.getBoundingClientRect().height
 
-  // Add new 4H-style tick every ~5 frames (slower, bigger moves)
   tickCounter++
   if (tickCounter >= 5) {
     tickCounter = 0
-    // 4H movement: momentum-driven with trend continuation
     const trendBias = 0.02
     const momentum = (marketPrice - (priceHistory[priceHistory.length - 2] || marketPrice)) * 0.3
     const noise = (Math.random() - 0.48 + trendBias) * 0.7
@@ -102,7 +61,6 @@ function drawFrame() {
     }
   }
 
-  // Find min/max for auto-scaling
   const visiblePoints = priceHistory.slice(-Math.ceil(w))
   const min = Math.min(...visiblePoints)
   const max = Math.max(...visiblePoints)
@@ -111,7 +69,6 @@ function drawFrame() {
 
   ctx.clearRect(0, 0, w, h)
 
-  // Draw filled area under the line
   ctx.beginPath()
   const startX = w - visiblePoints.length
   for (let i = 0; i < visiblePoints.length; i++) {
@@ -120,14 +77,12 @@ function drawFrame() {
     if (i === 0) ctx.moveTo(x, y)
     else ctx.lineTo(x, y)
   }
-  // Close the fill area
   ctx.lineTo(w, h)
   ctx.lineTo(startX, h)
   ctx.closePath()
   ctx.fillStyle = 'rgba(255, 255, 255, 0.06)'
   ctx.fill()
 
-  // Draw the market line
   ctx.beginPath()
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)'
   ctx.lineWidth = 1.5
@@ -145,7 +100,6 @@ function drawFrame() {
   ctx.stroke()
   ctx.shadowBlur = 0
 
-  // Glowing dot at the latest price (rightmost point)
   if (visiblePoints.length > 0) {
     const lastY = padding + ((max - visiblePoints[visiblePoints.length - 1]) / range) * (h - padding * 2)
     ctx.beginPath()

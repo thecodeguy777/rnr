@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { collections } from '~/data/collections'
-import { products, formatPrice } from '~/data/products'
+import { products } from '~/data/products'
+
+const { getProductPrice, formatPrice } = useGoldPrice()
 
 useHead({ title: 'Collections — RNR Gold Jewelry' })
 
@@ -8,10 +10,12 @@ useHead({ title: 'Collections — RNR Gold Jewelry' })
 const allProducts = products
 const selectedCategory = ref('all')
 const selectedKarat = ref('all')
+const selectedStone = ref('all')
 const sortBy = ref('default')
 const priceRange = ref([0, 200000])
 
 const karats = ['all', '14K', '18K', '21K', '24K']
+const stones = ['all', 'Diamond', 'Pearl', 'None']
 
 const categories = [
   { slug: 'all', name: 'All Pieces' },
@@ -29,19 +33,19 @@ const filteredProducts = computed(() => {
     result = result.filter(p => p.karat === selectedKarat.value)
   }
 
-  // Price filter
-  result = result.filter(p => p.price >= priceRange.value[0] && p.price <= priceRange.value[1])
+  // Price filter (dynamic)
+  result = result.filter(p => getProductPrice(p) >= priceRange.value[0] && getProductPrice(p) <= priceRange.value[1])
 
-  // Sort
-  if (sortBy.value === 'price-asc') result.sort((a, b) => a.price - b.price)
-  else if (sortBy.value === 'price-desc') result.sort((a, b) => b.price - a.price)
+  // Sort (dynamic)
+  if (sortBy.value === 'price-asc') result.sort((a, b) => getProductPrice(a) - getProductPrice(b))
+  else if (sortBy.value === 'price-desc') result.sort((a, b) => getProductPrice(b) - getProductPrice(a))
   else if (sortBy.value === 'weight') result.sort((a, b) => b.weightGrams - a.weightGrams)
   else if (sortBy.value === 'newest') result.reverse()
 
   return result
 })
 
-const maxPrice = computed(() => Math.max(...allProducts.map(p => p.price)))
+const maxPrice = computed(() => Math.max(...allProducts.map(p => getProductPrice(p))))
 </script>
 
 <template>
@@ -120,6 +124,24 @@ const maxPrice = computed(() => Math.max(...allProducts.map(p => p.price)))
               <span>{{ formatPrice(priceRange[1]) }}</span>
             </div>
           </div>
+
+          <!-- Stones -->
+          <div class="mb-8">
+            <h3 class="text-[10px] tracking-[0.2em] uppercase text-base-content/40 font-medium mb-4">Stones</h3>
+            <div class="flex flex-wrap gap-1.5">
+              <button
+                v-for="s in stones"
+                :key="s"
+                class="px-3 py-1 text-[10px] tracking-wider uppercase border transition-colors rounded-sm"
+                :class="selectedStone === s
+                  ? 'border-primary bg-primary text-primary-content'
+                  : 'border-base-300 text-base-content/50 hover:border-base-content/30'"
+                @click="selectedStone = s"
+              >
+                {{ s === 'all' ? 'All' : s }}
+              </button>
+            </div>
+          </div>
         </aside>
 
         <!-- Product Grid -->
@@ -152,7 +174,7 @@ const maxPrice = computed(() => Math.max(...allProducts.map(p => p.price)))
 
           <div v-else class="text-center py-20">
             <p class="text-base-content/40 text-sm">No pieces found with the selected filters.</p>
-            <button class="text-primary text-xs mt-3 hover:underline" @click="selectedCategory = 'all'; selectedKarat = 'all'; priceRange[1] = maxPrice">
+            <button class="text-primary text-xs mt-3 hover:underline" @click="selectedCategory = 'all'; selectedKarat = 'all'; selectedStone = 'all'; priceRange[1] = maxPrice">
               Clear filters
             </button>
           </div>

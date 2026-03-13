@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { formatPrice, type Product } from '~/data/products'
+import type { Product } from '~/data/products'
+
+const { getProductPrice, formatPrice } = useGoldPrice()
 
 defineProps<{
   product: Product
@@ -33,7 +35,7 @@ defineProps<{
       </h3>
       <div class="flex items-center gap-2 mt-1">
         <p class="text-sm text-base-content/70">
-          {{ formatPrice(product.price) }}
+          {{ formatPrice(getProductPrice(product)) }}
         </p>
         <span class="text-[9px] tracking-wider text-base-content/30 uppercase">{{ product.karat }}</span>
       </div>

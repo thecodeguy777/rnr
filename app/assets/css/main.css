@@ -9,26 +9,26 @@
   default: true;
   color-scheme: light;
 
-  /* Warm cream backgrounds */
-  --color-base-100: oklch(96.5% 0.01 75);
-  --color-base-200: oklch(94% 0.012 75);
-  --color-base-300: oklch(91% 0.015 75);
+  /* Stone backgrounds — brand #F6F1EC */
+  --color-base-100: oklch(96.1% 0.008 68);
+  --color-base-200: oklch(92.5% 0.016 74);
+  --color-base-300: oklch(87.8% 0.021 72);
   --color-base-content: oklch(22% 0.02 45);
 
-  /* Brand orange primary */
-  --color-primary: oklch(55% 0.18 35);
+  /* Brand Orange — #f06a35 */
+  --color-primary: oklch(68.1% 0.178 41);
   --color-primary-content: oklch(98% 0.005 0);
 
-  /* Warm muted secondary */
-  --color-secondary: oklch(45% 0.1 40);
+  /* Burgundy Red — #610600 */
+  --color-secondary: oklch(31.4% 0.123 31);
   --color-secondary-content: oklch(96% 0.01 0);
 
-  /* Gold accent */
-  --color-accent: oklch(76% 0.12 85);
-  --color-accent-content: oklch(22% 0.02 85);
+  /* Deep Blue — #18263b */
+  --color-accent: oklch(26.7% 0.044 258);
+  --color-accent-content: oklch(96% 0.005 0);
 
-  /* Dark charcoal neutral */
-  --color-neutral: oklch(25% 0.015 45);
+  /* Deep Blue neutral — #18263b */
+  --color-neutral: oklch(26.7% 0.044 258);
   --color-neutral-content: oklch(96% 0.005 0);
 
   /* Status colors */
@@ -70,7 +70,7 @@ html {
 
 /* ── Brand gradient utility ── */
 .brand-gradient {
-  background: linear-gradient(135deg, #8B3A0F, #C65D1A, #E07730, #C65D1A, #8B3A0F);
+  background: linear-gradient(135deg, #610600, #f06a35, #f07840, #f06a35, #610600);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -106,4 +106,14 @@ html {
 
 .img-zoom:hover img {
   transform: scale(1.05);
+}
+
+/* ── Hide scrollbar for carousel ── */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
