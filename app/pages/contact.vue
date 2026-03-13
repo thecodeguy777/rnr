@@ -23,11 +23,11 @@ function handleSubmit() {
 
             <div class="space-y-6">
               <div>
-                <h3 class="text-xs tracking-widest uppercase text-primary/60 mb-2">Visit Us</h3>
+                <h3 class="text-xs tracking-[0.2em] uppercase text-primary/60 mb-2">Visit Us</h3>
                 <p class="text-base-content/60 text-sm">Manila, Philippines</p>
               </div>
               <div>
-                <h3 class="text-xs tracking-widest uppercase text-primary/60 mb-2">Social</h3>
+                <h3 class="text-xs tracking-[0.2em] uppercase text-primary/60 mb-2">Social</h3>
                 <a
                   href="https://www.facebook.com/rnr.goldjewelry"
                   target="_blank"
@@ -39,7 +39,7 @@ function handleSubmit() {
                 </a>
               </div>
               <div>
-                <h3 class="text-xs tracking-widest uppercase text-primary/60 mb-2">Hours</h3>
+                <h3 class="text-xs tracking-[0.2em] uppercase text-primary/60 mb-2">Hours</h3>
                 <p class="text-base-content/60 text-sm">By appointment</p>
               </div>
             </div>
@@ -51,40 +51,41 @@ function handleSubmit() {
               <form @submit.prevent="handleSubmit">
                 <div class="space-y-5">
                   <fieldset class="fieldset">
-                    <legend class="fieldset-legend text-xs tracking-widest uppercase">Full Name</legend>
+                    <legend class="fieldset-legend text-xs tracking-[0.2em] uppercase">Full Name</legend>
                     <input type="text" class="input w-full" placeholder="Juan Dela Cruz" required />
                   </fieldset>
 
                   <fieldset class="fieldset">
-                    <legend class="fieldset-legend text-xs tracking-widest uppercase">Email Address</legend>
+                    <legend class="fieldset-legend text-xs tracking-[0.2em] uppercase">Email Address</legend>
                     <input type="email" class="input w-full" placeholder="juan@email.com" required />
                   </fieldset>
 
                   <fieldset class="fieldset">
-                    <legend class="fieldset-legend text-xs tracking-widest uppercase">Phone (optional)</legend>
+                    <legend class="fieldset-legend text-xs tracking-[0.2em] uppercase">Phone (optional)</legend>
                     <input type="tel" class="input w-full" placeholder="+63 9XX XXX XXXX" />
                   </fieldset>
 
                   <fieldset class="fieldset">
-                    <legend class="fieldset-legend text-xs tracking-widest uppercase">Interested In</legend>
+                    <legend class="fieldset-legend text-xs tracking-[0.2em] uppercase">Interested In</legend>
                     <select class="select w-full">
                       <option value="">Select a category</option>
                       <option value="rings">Rings</option>
                       <option value="necklaces">Necklaces</option>
                       <option value="earrings">Earrings</option>
                       <option value="bracelets">Bracelets</option>
+                      <option value="pendants">Pendants</option>
                       <option value="custom">Custom Piece</option>
                       <option value="other">Other</option>
                     </select>
                   </fieldset>
 
                   <fieldset class="fieldset">
-                    <legend class="fieldset-legend text-xs tracking-widest uppercase">Message</legend>
+                    <legend class="fieldset-legend text-xs tracking-[0.2em] uppercase">Message</legend>
                     <textarea class="textarea w-full" rows="4" placeholder="Tell us what you're looking for..." required></textarea>
                   </fieldset>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-full mt-8 tracking-widest uppercase text-xs">
+                <button type="submit" class="btn btn-primary w-full mt-8 tracking-[0.2em] uppercase text-xs">
                   Send Message
                 </button>
               </form>
@@ -97,7 +98,7 @@ function handleSubmit() {
               <p class="text-base-content/50 text-sm mb-6">
                 Thank you for your interest. We'll get back to you within 24 hours.
               </p>
-              <button class="btn btn-ghost btn-sm tracking-widest uppercase text-xs" @click="submitted = false">
+              <button class="btn btn-ghost btn-sm tracking-[0.2em] uppercase text-xs" @click="submitted = false">
                 Send Another Message
               </button>
             </div>

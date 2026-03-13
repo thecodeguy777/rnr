@@ -1,14 +1,16 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   class?: string
-  variant?: 'white' | 'orange'
+  variant?: 'white' | 'dark'
   height?: string
 }>()
+
+const src = computed(() => props.variant === 'white' ? '/logo.svg' : '/logo-dark.svg')
 </script>
 
 <template>
   <img
-    src="/logo.svg"
+    :src="src"
     alt="RNR Gold Jewelry"
     :class="$props.class"
     :style="{ height: height || '40px', width: 'auto', objectFit: 'contain' }"

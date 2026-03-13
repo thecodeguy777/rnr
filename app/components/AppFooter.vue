@@ -1,10 +1,10 @@
 <template>
-  <footer class="bg-base-300 border-t border-primary/10">
+  <footer class="bg-base-200 border-t border-base-300">
     <div class="max-w-7xl mx-auto px-6 lg:px-12 py-16">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
         <!-- Brand -->
         <div>
-          <RnrLogo height="48px" variant="white" class="mb-4" />
+          <RnrLogo height="48px" variant="dark" class="mb-4" />
           <p class="text-sm text-base-content/50 leading-relaxed max-w-xs">
             Fine gold jewelry crafted with generational mastery. Investment-grade pieces meant to be treasured and passed down.
           </p>
@@ -36,7 +36,7 @@
       </div>
 
       <!-- Bottom bar -->
-      <div class="mt-16 pt-8 border-t border-base-content/5 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="mt-16 pt-8 border-t border-base-300 flex flex-col md:flex-row justify-between items-center gap-4">
         <p class="text-xs text-base-content/30 tracking-wider">
           &copy; {{ new Date().getFullYear() }} RNR Gold Jewelry. All rights reserved.
         </p>

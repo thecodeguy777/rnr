@@ -1,49 +1,163 @@
 <script setup lang="ts">
 import { collections } from '~/data/collections'
+import { products, formatPrice } from '~/data/products'
 
 useHead({ title: 'Collections — RNR Gold Jewelry' })
+
+// All products combined for the "all" view
+const allProducts = products
+const selectedCategory = ref('all')
+const selectedKarat = ref('all')
+const sortBy = ref('default')
+const priceRange = ref([0, 200000])
+
+const karats = ['all', '14K', '18K', '21K', '24K']
+
+const categories = [
+  { slug: 'all', name: 'All Pieces' },
+  ...collections.map(c => ({ slug: c.slug, name: c.name })),
+]
+
+const filteredProducts = computed(() => {
+  let result = [...allProducts]
+
+  if (selectedCategory.value !== 'all') {
+    result = result.filter(p => p.collection === selectedCategory.value)
+  }
+
+  if (selectedKarat.value !== 'all') {
+    result = result.filter(p => p.karat === selectedKarat.value)
+  }
+
+  // Price filter
+  result = result.filter(p => p.price >= priceRange.value[0] && p.price <= priceRange.value[1])
+
+  // Sort
+  if (sortBy.value === 'price-asc') result.sort((a, b) => a.price - b.price)
+  else if (sortBy.value === 'price-desc') result.sort((a, b) => b.price - a.price)
+  else if (sortBy.value === 'weight') result.sort((a, b) => b.weightGrams - a.weightGrams)
+  else if (sortBy.value === 'newest') result.reverse()
+
+  return result
+})
+
+const maxPrice = computed(() => Math.max(...allProducts.map(p => p.price)))
 </script>
 
 <template>
-  <div>
-    <!-- Hero -->
-    <HeroSection
-      image="https://images.unsplash.com/photo-1602752250015-52934bc45613?w=1600&q=80"
-      height="min-h-[50vh]"
-    >
-      <p class="text-xs tracking-[0.3em] uppercase text-primary/80 mb-4">Browse</p>
-      <h1 class="font-serif text-4xl md:text-6xl font-light tracking-wide">Collections</h1>
-    </HeroSection>
+  <div class="pt-20">
+    <!-- Page Header -->
+    <div class="px-6 lg:px-12 pt-8 pb-6 max-w-7xl mx-auto">
+      <p class="text-[10px] tracking-[0.3em] uppercase text-primary/60 mb-2">Browse</p>
+      <h1 class="font-serif text-3xl md:text-5xl font-light">Collections</h1>
+    </div>
 
-    <!-- Collections Grid -->
-    <section class="py-24 px-6 lg:px-12">
-      <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <NuxtLink
-            v-for="collection in collections"
-            :key="collection.slug"
-            :to="`/collections/${collection.slug}`"
-            class="group relative overflow-hidden aspect-[4/3]"
-          >
-            <img
-              :src="collection.image"
-              :alt="collection.name"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-            <div class="absolute bottom-0 left-0 right-0 p-8">
-              <h2 class="font-serif text-3xl text-white group-hover:text-primary transition-colors mb-2">
-                {{ collection.name }}
-              </h2>
-              <p class="text-white/50 text-sm leading-relaxed max-w-md">
-                {{ collection.description }}
-              </p>
-              <p class="text-primary/60 text-xs mt-3 tracking-widest uppercase">
-                {{ collection.itemCount }} pieces
-              </p>
+    <!-- Main: Sidebar + Grid -->
+    <section class="px-6 lg:px-12 pb-24">
+      <div class="max-w-7xl mx-auto flex gap-10">
+
+        <!-- Sidebar Filters (desktop) -->
+        <aside class="hidden lg:block w-56 shrink-0 border-r border-base-300 pr-8">
+          <!-- Categories -->
+          <div class="mb-8">
+            <h3 class="text-[10px] tracking-[0.2em] uppercase text-base-content/40 font-medium mb-4">Category</h3>
+            <ul class="space-y-2">
+              <li v-for="cat in categories" :key="cat.slug">
+                <button
+                  class="text-sm transition-colors w-full text-left py-0.5"
+                  :class="selectedCategory === cat.slug ? 'text-primary font-medium' : 'text-base-content/50 hover:text-base-content/80'"
+                  @click="selectedCategory = cat.slug"
+                >
+                  {{ cat.name }}
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Sort -->
+          <div class="mb-8">
+            <h3 class="text-[10px] tracking-[0.2em] uppercase text-base-content/40 font-medium mb-4">Sort By</h3>
+            <select v-model="sortBy" class="select select-sm w-full text-xs bg-transparent border-base-300">
+              <option value="default">Default</option>
+              <option value="newest">Newest</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="weight">Weight</option>
+            </select>
+          </div>
+
+          <!-- Karat / Finishing -->
+          <div class="mb-8">
+            <h3 class="text-[10px] tracking-[0.2em] uppercase text-base-content/40 font-medium mb-4">Finishing</h3>
+            <div class="flex flex-wrap gap-1.5">
+              <button
+                v-for="k in karats"
+                :key="k"
+                class="px-3 py-1 text-[10px] tracking-wider uppercase border transition-colors rounded-sm"
+                :class="selectedKarat === k
+                  ? 'border-primary bg-primary text-primary-content'
+                  : 'border-base-300 text-base-content/50 hover:border-base-content/30'"
+                @click="selectedKarat = k"
+              >
+                {{ k === 'all' ? 'All' : k }}
+              </button>
             </div>
-          </NuxtLink>
+          </div>
+
+          <!-- Price Range -->
+          <div class="mb-8">
+            <h3 class="text-[10px] tracking-[0.2em] uppercase text-base-content/40 font-medium mb-4">Per Gram Price</h3>
+            <input
+              type="range"
+              :min="0"
+              :max="maxPrice"
+              :step="5000"
+              v-model.number="priceRange[1]"
+              class="range range-xs range-primary w-full"
+            />
+            <div class="flex justify-between text-[10px] text-base-content/40 mt-2">
+              <span>₱0</span>
+              <span>{{ formatPrice(priceRange[1]) }}</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <div class="flex-1">
+          <!-- Top bar: count + mobile filter toggle -->
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-base-300">
+            <p class="text-xs text-base-content/40">
+              {{ filteredProducts.length }} piece{{ filteredProducts.length !== 1 ? 's' : '' }}
+            </p>
+
+            <!-- Mobile filters (dropdown) -->
+            <div class="flex items-center gap-3 lg:hidden">
+              <select v-model="selectedCategory" class="select select-xs text-[10px] bg-transparent border-base-300">
+                <option v-for="cat in categories" :key="cat.slug" :value="cat.slug">{{ cat.name }}</option>
+              </select>
+              <select v-model="selectedKarat" class="select select-xs text-[10px] bg-transparent border-base-300">
+                <option v-for="k in karats" :key="k" :value="k">{{ k === 'all' ? 'All Karats' : k }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Grid -->
+          <div v-if="filteredProducts.length" class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+            <ProductCard
+              v-for="product in filteredProducts"
+              :key="product.id"
+              :product="product"
+            />
+          </div>
+
+          <div v-else class="text-center py-20">
+            <p class="text-base-content/40 text-sm">No pieces found with the selected filters.</p>
+            <button class="text-primary text-xs mt-3 hover:underline" @click="selectedCategory = 'all'; selectedKarat = 'all'; priceRange[1] = maxPrice">
+              Clear filters
+            </button>
+          </div>
         </div>
+
       </div>
     </section>
   </div>

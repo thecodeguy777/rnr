@@ -180,20 +180,23 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full z-[60] bg-base-300 border-b border-primary/10 select-none">
+  <div class="w-full z-[60] bg-base-200 border-b border-base-300 select-none">
     <div class="max-w-7xl mx-auto px-4 lg:px-8">
       <div class="flex items-center h-14 gap-6">
 
-        <!-- Left: Karat prices (desktop) -->
+        <!-- Left: All karat prices (desktop) -->
         <div class="hidden lg:flex items-center gap-5 text-[10px] tracking-wider shrink-0">
-          <div v-for="price in karatPrices.slice(0, 2)" :key="price.label" class="flex items-center gap-1.5 text-base-content/40">
+          <div v-for="price in karatPrices" :key="price.label" class="flex items-center gap-1.5 text-base-content/40">
             <span>{{ price.label }}</span>
             <span class="text-base-content/60 font-mono">{{ formatPHP(price.php) }}/g</span>
           </div>
         </div>
 
-        <!-- Center: Price on top, market chart below -->
-        <div class="flex-1 max-w-sm mx-auto flex flex-col items-center ticker-orange-bg rounded-sm px-5 py-1">
+        <!-- Spacer pushes the price box to the right -->
+        <div class="flex-1"></div>
+
+        <!-- Right: Gold price box with market chart -->
+        <div class="max-w-xs w-full lg:w-auto flex flex-col items-center ticker-orange-bg rounded-sm px-5 py-1 shrink-0">
           <!-- Price row -->
           <div class="flex items-center gap-2">
             <span class="relative flex h-1.5 w-1.5">
@@ -233,14 +236,6 @@ onUnmounted(() => {
           <!-- Market chart line below the price -->
           <div class="w-full h-4 relative">
             <canvas ref="canvas" class="absolute inset-0 w-full h-full" />
-          </div>
-        </div>
-
-        <!-- Right: More karat prices (desktop) -->
-        <div class="hidden lg:flex items-center gap-5 text-[10px] tracking-wider shrink-0">
-          <div v-for="price in karatPrices.slice(2)" :key="price.label" class="flex items-center gap-1.5 text-base-content/40">
-            <span>{{ price.label }}</span>
-            <span class="text-base-content/60 font-mono">{{ formatPHP(price.php) }}/g</span>
           </div>
         </div>
 

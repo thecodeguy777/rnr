@@ -22,7 +22,7 @@ if (product) {
   <div v-if="product" class="pt-20">
     <!-- Breadcrumb -->
     <div class="px-6 lg:px-12 py-6 max-w-7xl mx-auto">
-      <div class="text-xs tracking-widest uppercase text-base-content/40 flex items-center gap-2">
+      <div class="text-[10px] tracking-[0.2em] uppercase text-base-content/40 flex items-center gap-2">
         <NuxtLink to="/collections" class="hover:text-primary transition-colors">Collections</NuxtLink>
         <span>/</span>
         <NuxtLink :to="`/collections/${product.collection}`" class="hover:text-primary transition-colors">
@@ -80,7 +80,7 @@ if (product) {
           </p>
 
           <!-- Specs -->
-          <div class="grid grid-cols-3 gap-4 py-8 border-y border-base-content/5">
+          <div class="grid grid-cols-3 gap-4 py-8 border-y border-base-300">
             <div>
               <p class="text-xs tracking-widest uppercase text-base-content/40 mb-1">Karat</p>
               <p class="text-lg font-serif">{{ product.karat }}</p>
@@ -96,7 +96,7 @@ if (product) {
           </div>
 
           <!-- Description -->
-          <div class="py-8 border-b border-base-content/5">
+          <div class="py-8 border-b border-base-300">
             <p class="text-base-content/60 leading-relaxed">{{ product.description }}</p>
           </div>
 
@@ -110,17 +110,17 @@ if (product) {
           <div class="mt-4 flex gap-3">
             <button
               v-if="product.status === 'available'"
-              class="btn btn-primary tracking-widest uppercase text-xs flex-1"
+              class="btn btn-primary tracking-[0.2em] uppercase text-[10px] flex-1"
               @click="showInquiry = true"
             >
               Inquire About This Piece
             </button>
-            <button v-else class="btn btn-disabled tracking-widest uppercase text-xs flex-1" disabled>
+            <button v-else class="btn btn-disabled tracking-[0.2em] uppercase text-[10px] flex-1" disabled>
               {{ product.status === 'sold' ? 'Sold' : 'Reserved' }}
             </button>
             <NuxtLink
               to="/contact"
-              class="btn btn-ghost border border-base-content/10 tracking-widest uppercase text-xs"
+              class="btn btn-ghost border border-base-300 tracking-[0.2em] uppercase text-[10px]"
             >
               Contact Us
             </NuxtLink>
@@ -135,7 +135,7 @@ if (product) {
         <h2 class="font-serif text-2xl md:text-3xl font-light text-center mb-12">
           More from {{ collection?.name }}
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
           <ProductCard
             v-for="p in relatedProducts"
             :key="p.id"
@@ -177,7 +177,7 @@ if (product) {
 
           <div class="modal-action">
             <button type="button" class="btn btn-ghost btn-sm" @click="showInquiry = false">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm tracking-widest uppercase text-xs">Send Inquiry</button>
+            <button type="submit" class="btn btn-primary btn-sm tracking-[0.2em] uppercase text-[10px]">Send Inquiry</button>
           </div>
         </form>
       </div>
@@ -191,7 +191,7 @@ if (product) {
   <div v-else class="min-h-screen flex items-center justify-center">
     <div class="text-center">
       <h1 class="font-serif text-4xl mb-4">Piece Not Found</h1>
-      <NuxtLink to="/collections" class="btn btn-primary btn-sm tracking-widest uppercase text-xs">
+      <NuxtLink to="/collections" class="btn btn-primary btn-sm tracking-[0.2em] uppercase text-[10px]">
         View Collections
       </NuxtLink>
     </div>

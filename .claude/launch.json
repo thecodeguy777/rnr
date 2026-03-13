@@ -2,11 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "rnr-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000,
-      "cwd": "C:\\Users\\mary\\repos\\rnr-gold-jewelry"
+      "name": "mockup",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".claude/start-dev.cjs"],
+      "port": 3000
     }
   ]
 }
